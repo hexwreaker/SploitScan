@@ -737,9 +737,7 @@ def import_vulnerability_data(file_path, file_type=None):
             return import_file(file_path, parse_plaintext_cve_list)
         else:
             print(
-                f"❌ Error: The file '{
-                    file_path}' does not appear to be a valid list of CVEs. "
-                "Please specify the correct file type using the --type option."
+                f"❌ Error: The file '{file_path}' does not appear to be a valid list of CVEs. Please specify the correct file type using the --type option."
             )
             return []
 
@@ -821,8 +819,7 @@ def import_file(file_path, parse_function):
         unique_cve_ids = list(set(cve_ids))
         print(
             YELLOW +
-            f"📥 Successfully imported {len(unique_cve_ids)} CVE(s) from '{
-                file_path}'.\n"
+            f"📥 Successfully imported {len(unique_cve_ids)} CVE(s) from '{file_path}'.\n"
         )
         return unique_cve_ids
     except ET.ParseError as e:
@@ -830,8 +827,7 @@ def import_file(file_path, parse_function):
     except json.JSONDecodeError as e:
         print(f"❌ Error parsing the JSON file '{file_path}': {e}")
     except Exception as e:
-        print(f"❌ An unexpected error occurred while processing '{
-              file_path}': {e}")
+        print(f"❌ An unexpected error occurred while processing '{file_path}': {e}")
     return []
 
 
@@ -1086,11 +1082,7 @@ def compile_cve_details(cve_id, cve_data, epss_data, relevant_cisa_data, public_
     vulncheck_exploits = (
         "\n".join(
             [
-                f"{xdb['date_added']}: "
-                f"{xdb['clone_ssh_url'].replace(
-                    'git@github.com:', 'https://github.com/').replace('.git', '')}"
-                for item in public_exploits["vulncheck_data"].get("data", [])
-                for xdb in item.get("vulncheck_xdb", [])
+                f"{xdb['date_added']}: "f"{xdb['clone_ssh_url'].replace('git@github.com:', 'https://github.com/').replace('.git', '')}" for item in public_exploits["vulncheck_data"].get("data", []) for xdb in item.get("vulncheck_xdb", [])
             ]
         )
         if public_exploits["vulncheck_data"]
@@ -1101,8 +1093,7 @@ def compile_cve_details(cve_id, cve_data, epss_data, relevant_cisa_data, public_
         "packetstorm_url", "N/A")
 
     nuclei_url = (
-        f"https://raw.githubusercontent.com/projectdiscovery/nuclei-templates/main/{
-            public_exploits['nuclei_data']['file_path']}"
+        f"https://raw.githubusercontent.com/projectdiscovery/nuclei-templates/main/{public_exploits['nuclei_data']['file_path']}"
         if public_exploits["nuclei_data"] and "file_path" in public_exploits["nuclei_data"]
         else "N/A"
     )
@@ -1210,8 +1201,7 @@ def main_fast(cve_ids, export_format=None):
     for cve_id in cve_ids:
         cve_id = cve_id.upper()
         if not is_valid_cve_id(cve_id):
-            print(f"❌ Invalid CVE ID format: {
-                  cve_id}. Please use the format CVE-YYYY-NNNNN.")
+            print(f"❌ Invalid CVE ID format: {cve_id}. Please use the format CVE-YYYY-NNNNN.")
             continue
 
         year = cve_id.split('-')[1]
@@ -1279,8 +1269,7 @@ def main(cve_ids, export_format=None, import_file=None, import_type=None, config
     for cve_id in cve_ids:
         cve_id = cve_id.upper()
         if not is_valid_cve_id(cve_id):
-            print(f"❌ Invalid CVE ID format: {
-                  cve_id}. Please use the format CVE-YYYY-NNNNN.")
+            print(f"❌ Invalid CVE ID format: {cve_id}. Please use the format CVE-YYYY-NNNNN.")
             continue
 
         print_cve_header(cve_id)
@@ -1289,7 +1278,6 @@ def main(cve_ids, export_format=None, import_file=None, import_type=None, config
             continue
 
         public_exploits = fetch_and_display_public_exploits(cve_id)
-
         epss_data = None
         relevant_cisa_data = None
         hackerone_data = None
