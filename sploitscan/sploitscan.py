@@ -1195,9 +1195,21 @@ def search_cve_by_keywords(keywords):
     return list(cve_ids)
 
 
-def main_fast(cve_ids, export_format=None):
+def main_fast(cve_ids, export_format=None, import_file=None, import_type=None):
     all_results = []
     print(cve_ids)
+
+    if import_file and not import_type:
+        cve_ids = import_vulnerability_data(import_file)
+        if not cve_ids:
+            print("❌ No valid CVE IDs found in the provided file.")
+            return
+    elif import_file and import_type:
+        cve_ids = import_vulnerability_data(import_file, import_type)
+        if not cve_ids:
+            print("❌ No valid CVE IDs found in the provided file.")
+            return
+
     for cve_id in cve_ids:
         cve_id = cve_id.upper()
         if not is_valid_cve_id(cve_id):
@@ -1413,12 +1425,12 @@ def cli():
         if not cve_ids:
             sys.exit(1)
         if args.fast_mode:
-            main_fast(cve_ids, args.export)
+            main_fast(cve_ids, args.export, args.import_file, args.type)
         elif not args.silent:
             main(cve_ids, args.export, args.import_file, args.type, args.config, args.methods, args.debug)
     else:
         if args.fast_mode:
-            main_fast(args.cve_ids, args.export)
+            main_fast(args.cve_ids, args.export, args.import_file, args.type)
         elif not args.silent:
             main(args.cve_ids, args.export, args.import_file, args.type, args.config, args.methods, args.debug)
 
